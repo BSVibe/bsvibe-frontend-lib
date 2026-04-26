@@ -48,22 +48,51 @@ a Tailwind 4 `@theme {}` block, so utilities like `bg-gray-900`,
 immediately. Role aliases (`var(--bg-surface)`, `var(--accent)`,
 `var(--m3-surface-container)`) are exposed via `:root {}`.
 
-### Per-product accent override
+### Per-product accent override (canonical Phase A pattern)
+
+The package exposes two accent slots — `--color-accent` and
+`--color-accent-hover` — inside its `@theme {}` block. Override them in
+your product's global CSS to repaint `bg-accent`, `text-accent`,
+`hover:bg-accent-hover`, etc. across the entire app. Defaults to BSNexus
+blue if omitted.
 
 ```css
-/* Only one line per product. Defaults to BSNexus blue if omitted. */
-:root {
-  --accent: #f59e0b; /* BSGateway */
+/* app/globals.css (Next.js) or src/index.css (Vite) */
+@import "tailwindcss";
+@import "@bsvibe/design-tokens/css";
+
+@theme {
+  --color-accent: #f59e0b;       /* BSGateway amber-500 */
+  --color-accent-hover: #d97706; /* amber-600 */
 }
-:root {
-  --accent: #f43f5e; /* BSupervisor */
-}
-:root {
-  --accent: #10b981; /* BSage */
-}
-:root {
-  --accent: #6366f1; /* BSVibe / bsvibe-site */
-}
+```
+
+The Tailwind 4 `@theme {}` block "shadow-vars" the package's defaults at
+build time, so `bg-accent`, `text-accent`, `border-accent`,
+`hover:bg-accent-hover` are all generated as utility classes. No
+`tailwind.config.js` is required.
+
+#### Per-product accent table
+
+| Product       | `--color-accent` | `--color-accent-hover` |
+| ------------- | ---------------- | ---------------------- |
+| BSNexus       | `#3b82f6` (blue-500)    | `#2563eb` (blue-600)    |
+| BSGateway     | `#f59e0b` (amber-500)   | `#d97706` (amber-600)   |
+| BSupervisor   | `#f43f5e` (rose-500)    | `#e11d48` (rose-600)    |
+| BSage         | `#10b981` (emerald-500) | `#059669` (emerald-600) |
+| BSVibe / site | `#6366f1` (indigo-500)  | `#4f46e5` (indigo-600)  |
+
+#### Legacy `:root { --accent }` pattern (consumer-side CSS only)
+
+For hand-written CSS that reads `var(--accent)` directly (e.g. auth-app,
+which has no Tailwind), the package also exposes a plain `:root --accent`
+variable. This is independent of the `@theme` shadow-vars pattern above
+and only affects `var(--accent)` references — it does NOT generate
+`bg-accent` Tailwind utilities. Use the `@theme {}` block above for
+Tailwind 4 consumers.
+
+```css
+:root { --accent: #f43f5e; } /* legacy hand-written CSS only */
 ```
 
 ### TypeScript values (chart libs, inline styles)

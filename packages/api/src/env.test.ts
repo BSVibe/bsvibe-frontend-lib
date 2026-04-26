@@ -72,4 +72,40 @@ describe('readDualEnv', () => {
       'https://api.example.com/',
     );
   });
+
+  // Phase A cleanup: when caller supplies a `fallback`, the return type
+  // narrows to `string` so consumers can pipe the result straight into
+  // `createApiFetch({ baseUrl })` (which requires `string`) without the
+  // `?? ''` boilerplate every product had to add otherwise.
+  describe('with fallback narrows to string', () => {
+    it('returns the fallback when nothing is set', () => {
+      expect(
+        readDualEnv('API_URL', { fallback: 'https://default.example.com' }),
+      ).toBe('https://default.example.com');
+    });
+
+    it('still resolves NEXT_PUBLIC_* over fallback', () => {
+      process.env.NEXT_PUBLIC_API_URL = 'https://next.example.com';
+      expect(
+        readDualEnv('API_URL', { fallback: 'https://default.example.com' }),
+      ).toBe('https://next.example.com');
+    });
+
+    it('resolves VITE_* over fallback', () => {
+      process.env.VITE_API_URL = 'https://vite.example.com';
+      expect(
+        readDualEnv('API_URL', { fallback: 'https://default.example.com' }),
+      ).toBe('https://vite.example.com');
+    });
+
+    it('treats empty-string fallback as a valid string return', () => {
+      // Some callers want `""` as the fallback so they can fall through to
+      // a same-origin relative URL. The string-return overload must accept
+      // that case too.
+      expect(readDualEnv('API_URL', { fallback: '' })).toBe('');
+    });
+
+    // Type-level narrowing (return type = `string` with fallback,
+    // `string | undefined` without) is asserted in `env.test-d.ts`.
+  });
 });

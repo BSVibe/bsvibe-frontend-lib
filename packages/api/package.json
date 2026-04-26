@@ -27,7 +27,7 @@
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint src",
-    "test": "vitest run",
+    "test": "vitest run && vitest run --typecheck.enabled --typecheck.only --typecheck.include 'src/**/*.test-d.ts'",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "clean": "rm -rf dist .tsbuildinfo *.tsbuildinfo"

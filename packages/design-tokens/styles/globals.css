@@ -44,6 +44,22 @@
   --color-rose-500: #f43f5e;
   --color-emerald-500: #10b981;
 
+  /*
+   * Accent shadow vars — products override these inside their own
+   * `@theme {}` block to generate `bg-accent` / `bg-accent-hover` /
+   * `text-accent` Tailwind utilities. Default = BSNexus blue.
+   *
+   * Override pattern (in product app/globals.css):
+   *
+   *   @import "@bsvibe/design-tokens/css";
+   *   @theme {
+   *     --color-accent: #f59e0b;        // BSGateway amber-500
+   *     --color-accent-hover: #d97706;  // amber-600
+   *   }
+   */
+  --color-accent: #3b82f6;
+  --color-accent-hover: #2563eb;
+
   /* Radius scale */
   --radius-sm: 4px;
   --radius-md: 8px;
