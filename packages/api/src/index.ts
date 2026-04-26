@@ -1,13 +1,49 @@
 /**
- * @bsvibe/api — placeholder.
+ * @bsvibe/api — BSVibe API client for Next.js 15 + legacy Vite consumers.
  *
- * Phase A 후속에서 본 구현:
- *  - createServerFetch() — RSC fetch wrapper, 자동 cookie 전달
- *  - createServerAction() — Server Action wrapper (auth + error handling)
- *  - Vercel → Route Handler adapter (Vercel Edge Function ↔ Next.js Route Handler 호환)
- *  - 401 인터셉터 → auth.bsvibe.dev 리다이렉트
+ * Phase A extraction. Replaces the ~40 LoC fetch/axios wrapper duplicated
+ * across BSGateway / BSNexus / BSage / BSupervisor with a single shared
+ * implementation.
  *
- * SoT: 4개 제품의 axios/fetch 401 핸들러 ~40 LOC × 4.
+ * Public surface:
+ *  - createApiFetch()        — Server / RSC / Client fetch wrapper.
+ *  - createServerAction()    — Next.js 15 Server Action envelope wrapper.
+ *  - createRouteAdapter()    — Vercel `(req,res)` → Next.js Route Handler.
+ *  - readDualEnv()           — NEXT_PUBLIC_X ?? VITE_X ?? default reader.
+ *  - setOnAuthError()        — register the 401 cascading-logout callback.
+ *  - handleAuthError()       — manually fire the 401 latch.
+ *  - resetAuthErrorGuard()   — re-arm after silent re-login.
+ *  - ApiError                — Error subclass thrown for non-2xx responses.
  */
 
-export const _placeholder = "@bsvibe/api" as const;
+export {
+  ApiError,
+  createApiFetch,
+  type ApiClient,
+  type CreateApiFetchOptions,
+  type RequestOptions,
+} from './fetch';
+
+export {
+  createServerAction,
+  type ServerActionError,
+  type ServerActionHandler,
+  type ServerActionResult,
+} from './server-action';
+
+export {
+  createRouteAdapter,
+  vercelToRoute,
+  type VercelLikeReq,
+  type VercelLikeRes,
+  type VercelStyleHandler,
+} from './adapter';
+
+export { readDualEnv, type ReadDualEnvOptions } from './env';
+
+export {
+  handleAuthError,
+  isAuthErrorGuardEngaged,
+  resetAuthErrorGuard,
+  setOnAuthError,
+} from './auth';
