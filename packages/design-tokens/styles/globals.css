@@ -1,0 +1,144 @@
+/*
+ * @bsvibe/design-tokens — canonical CSS variables.
+ *
+ * Mirrors `src/index.ts` (TypeScript source of truth) which in turn
+ * mirrors `~/Docs/design_system.md` v0.1.0. Drift between this file and
+ * `src/index.ts` is caught by `pnpm --filter @bsvibe/design-tokens verify`.
+ *
+ * Tailwind 4 (CSS-first) consumers import this file directly:
+ *
+ *   @import "tailwindcss";
+ *   @import "@bsvibe/design-tokens/css";
+ *
+ * The `@theme {}` block exposes Tailwind utilities (e.g. `bg-gray-900`).
+ * The `:root {}` block exposes role-based variables for hand-written CSS
+ * (e.g. `var(--bg-surface)`, `var(--accent)`).
+ *
+ * Per-product accent override:
+ *   :root { --accent: #f59e0b; }   /* BSGateway *\/
+ *   :root { --accent: #f43f5e; }   /* BSupervisor *\/
+ *   :root { --accent: #10b981; }   /* BSage *\/
+ *   :root { --accent: #6366f1; }   /* BSVibe (default for bsvibe-site) *\/
+ *   :root { --accent: #3b82f6; }   /* BSNexus (default below) *\/
+ */
+
+@theme {
+  /* Gray scale — 12 stops */
+  --color-gray-50: #f2f3f7;
+  --color-gray-100: #e4e6ee;
+  --color-gray-200: #c8ccdb;
+  --color-gray-300: #a8adc6;
+  --color-gray-400: #8187a8;
+  --color-gray-500: #5a5f7d;
+  --color-gray-600: #3d4160;
+  --color-gray-700: #2a2d42;
+  --color-gray-800: #1e2033;
+  --color-gray-850: #181926;
+  --color-gray-900: #111218;
+  --color-gray-950: #0a0b0f;
+
+  /* Brand accents — each product = one color, 500 is canonical */
+  --color-indigo-500: #6366f1;
+  --color-blue-500: #3b82f6;
+  --color-amber-500: #f59e0b;
+  --color-rose-500: #f43f5e;
+  --color-emerald-500: #10b981;
+
+  /* Radius scale */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* Spacing — 4px-based scale */
+  --spacing-0\.5: 2px;
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+  --spacing-24: 96px;
+
+  /* Shadow */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+
+  /* Typography — font families */
+  --font-sans:
+    "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono:
+    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+:root {
+  /* Alias tokens — semantic roles */
+  --bg-base: #0a0b0f;
+  --bg-surface: #111218;
+  --bg-elevated: #181926;
+  --bg-hover: #1e2033;
+  --bg-active: #2a2d42;
+
+  --text-primary: #f2f3f7;
+  --text-secondary: #8187a8;
+  --text-tertiary: #5a5f7d;
+  --text-disabled: #3d4160;
+  --text-inverse: #0a0b0f;
+
+  --border-default: #2a2d42;
+  --border-subtle: #1e2033;
+  --border-strong: #3d4160;
+
+  /* Default accent (BSNexus). Each product overrides via its own :root. */
+  --accent: #3b82f6;
+
+  /* Motion */
+  --duration-fast: 100ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+  --easing-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --easing-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Material 3 surface/role tokens (BSGateway dark amber theme).
+   * Consumers that want the M3 palette pull these vars directly; products
+   * that prefer the simpler gray/brand alias set ignore them. */
+  --m3-primary: #ffc174;
+  --m3-primary-container: #f59e0b;
+  --m3-on-primary: #472a00;
+  --m3-on-primary-container: #613b00;
+  --m3-secondary: #f0bd82;
+  --m3-secondary-container: #62400f;
+  --m3-on-secondary: #472a00;
+  --m3-on-secondary-container: #ddac72;
+  --m3-tertiary: #8fd5ff;
+  --m3-tertiary-container: #1abdff;
+  --m3-on-tertiary: #00344a;
+  --m3-on-tertiary-container: #004966;
+  --m3-error: #ffb4ab;
+  --m3-error-container: #93000a;
+  --m3-on-error: #690005;
+  --m3-on-error-container: #ffdad6;
+  --m3-surface: #121317;
+  --m3-surface-dim: #121317;
+  --m3-surface-bright: #38393e;
+  --m3-surface-container-lowest: #0d0e12;
+  --m3-surface-container-low: #1a1b20;
+  --m3-surface-container: #1f1f24;
+  --m3-surface-container-high: #292a2e;
+  --m3-surface-container-highest: #343439;
+  --m3-surface-variant: #343439;
+  --m3-on-surface: #e3e2e8;
+  --m3-on-surface-variant: #d8c3ad;
+  --m3-on-background: #e3e2e8;
+  --m3-outline: #a08e7a;
+  --m3-outline-variant: #534434;
+  --m3-background: #121317;
+  --m3-inverse-surface: #e3e2e8;
+  --m3-inverse-on-surface: #2f3035;
+  --m3-inverse-primary: #855300;
+  --m3-surface-tint: #ffb95f;
+}
