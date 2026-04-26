@@ -1,0 +1,32 @@
+{
+  "actions": {
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "signUp": "Sign up",
+    "switchTenant": "Switch tenant",
+    "manageAccount": "Manage account"
+  },
+  "session": {
+    "loading": "Checking session…",
+    "signedInAs": "Signed in as {name}",
+    "currentTenant": "Current tenant: {tenant}",
+    "expired": "Your session has expired. Please sign in again."
+  },
+  "errors": {
+    "invalidCredentials": "Invalid email or password.",
+    "tenantSwitchFailed": "Failed to switch tenant.",
+    "permissionDenied": "You do not have access to this tenant.",
+    "ssoFailed": "SSO sign-in failed."
+  },
+  "tenant": {
+    "label": "Tenant",
+    "noMemberships": "You are not a member of any tenant.",
+    "selectPrompt": "Select a tenant to switch to."
+  },
+  "role": {
+    "owner": "Owner",
+    "admin": "Admin",
+    "member": "Member",
+    "viewer": "Viewer"
+  }
+}

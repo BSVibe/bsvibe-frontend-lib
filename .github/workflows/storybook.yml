@@ -1,8 +1,8 @@
 name: Storybook (GitHub Pages)
 
 # Decision #13 (BSVibe_Execution_Lockin §3): Storybook host = GitHub Pages.
-# Phase A 후속 PR에서 @bsvibe/ui Storybook config 추가 시 활성화.
-# 현재 placeholder — main push 시 stub job만 실행 (실패하지 않음).
+# Phase A: build @bsvibe/ui Storybook → deploy to GitHub Pages on every
+# push to `main` (and via manual dispatch).
 
 on:
   push:
@@ -42,19 +42,13 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build Storybook (placeholder)
-        # Phase A 후속에서 실제 build:
-        #   run: pnpm --filter "@bsvibe/ui" run build-storybook
-        run: |
-          mkdir -p packages/ui/storybook-static
-          cat > packages/ui/storybook-static/index.html <<EOF
-          <!doctype html>
-          <html><head><meta charset="utf-8"><title>BSVibe Storybook (placeholder)</title></head>
-          <body style="font-family:system-ui;max-width:48rem;margin:4rem auto;padding:0 1rem">
-          <h1>BSVibe Storybook</h1>
-          <p>Placeholder — Phase A subsequent PR will add @bsvibe/ui components and Storybook configuration.</p>
-          </body></html>
-          EOF
+      - name: Build dependent packages (design-tokens)
+        # @bsvibe/ui resolves @bsvibe/design-tokens types via dist/, so the
+        # token package must be built before Storybook compiles the UI.
+        run: pnpm --filter "@bsvibe/design-tokens" run build
+
+      - name: Build Storybook
+        run: pnpm --filter "@bsvibe/ui" run build-storybook
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

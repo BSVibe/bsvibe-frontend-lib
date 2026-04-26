@@ -1,13 +1,47 @@
 /**
- * @bsvibe/i18n — placeholder.
+ * @bsvibe/i18n — next-intl wrapper for the BSVibe ecosystem.
  *
- * Phase C base (D15: next-intl):
- *  - common namespace (버튼/에러/폼 레이블)
- *  - auth namespace (SSO UI)
- *  - ko/en JSON resources (bsvibe-site 기존 커스텀 사전 시드)
- *  - createI18nConfig() — next-intl middleware + 라우팅 헬퍼
+ * Phase A surface (D15: next-intl 4.x + Next.js 15 App Router):
+ *  - createI18nConfig() — locale set + URL prefix policy
+ *  - createI18nMiddleware() / defaultMatcher — Next.js middleware
+ *  - BSVibeIntlProvider — Client provider for App Router root
+ *  - useT() / useCurrentLocale() — typed hooks (next-intl wrappers)
+ *  - getRequestConfig() — server-side message bundle composer
+ *  - shared `common` + `auth` namespaces (ko/en)
  *
- * Phase C 진입 시 본 구현 + 제품별 namespace.
+ * Sub-path entries (`@bsvibe/i18n/middleware`, `/provider`, `/config`,
+ * `/hooks`) preserve App Router boundaries — middleware import does not pull
+ * client-only code into Edge runtime, etc.
  */
 
-export const _placeholder = "@bsvibe/i18n" as const;
+export {
+  DEFAULT_LOCALE,
+  LOCALES,
+  createI18nConfig,
+  isSupportedLocale,
+  resolveLocale,
+} from './config';
+export type {
+  CreateI18nConfigOptions,
+  I18nConfig,
+  Locale,
+  LocalePrefix,
+} from './config';
+
+export {
+  SHARED_NAMESPACES,
+  getAllMessageKeys,
+  getNamespaceMessages,
+  loadNamespaceMessages,
+} from './messages';
+export type { MessageTree, SharedNamespace } from './messages';
+
+export { getRequestConfig, mergeMessages } from './request';
+export type { RequestConfig, RequestConfigArgs } from './request';
+
+export { createI18nMiddleware, defaultMatcher } from './middleware';
+
+export { BSVibeIntlProvider } from './provider';
+export type { BSVibeIntlProviderProps } from './provider';
+
+export { useCurrentLocale, useT } from './hooks';

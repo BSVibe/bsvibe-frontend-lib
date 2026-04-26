@@ -1,0 +1,41 @@
+{
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "submit": "Submit",
+    "create": "Create",
+    "back": "Back",
+    "next": "Next",
+    "retry": "Retry",
+    "refresh": "Refresh",
+    "search": "Search",
+    "copy": "Copy",
+    "copied": "Copied"
+  },
+  "status": {
+    "loading": "Loading…",
+    "saving": "Saving…",
+    "ready": "Ready",
+    "error": "Error",
+    "success": "Success",
+    "empty": "Nothing to show",
+    "noResults": "No results"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "network": "Network error. Check your connection.",
+    "unauthorized": "Please sign in to continue.",
+    "forbidden": "You do not have permission to perform this action.",
+    "notFound": "We could not find what you were looking for.",
+    "validation": "Please review your input."
+  },
+  "form": {
+    "required": "Required",
+    "optional": "Optional",
+    "placeholderText": "Enter a value"
+  }
+}
