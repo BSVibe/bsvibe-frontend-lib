@@ -1,14 +1,105 @@
 /**
- * @bsvibe/types — placeholder.
+ * @bsvibe/types — shared TypeScript types for the BSVibe ecosystem.
  *
- * Phase A 후속에서 BSVibe-Auth `js/` (`@bsvibe/auth` v0.4.0)의 types를 source of truth로 통합 예정:
- *  - User
- *  - Tenant / TenantMembership
- *  - Permission
- *  - ServiceTokenPayload (P0.7 audience-scoped JWT)
- *  - SessionEnvelope
+ * Phase A: extracted from BSVibe-Auth `js/src/types.ts` (v0.4.0) as the
+ * single source of truth. All four products + bsvibe-site + auth-app
+ * consume types from here.
  *
- * See https://github.com/BSVibe/BSVibe-Auth/tree/main/js/src for current SoT.
+ * Server-side / Phase 0 P0.7 service-token types (e.g. `ServiceTokenPayload`
+ * with audience-scoped claims) will be added when that work lands — they
+ * are intentionally not in this initial extraction.
  */
 
-export const _placeholder = "@bsvibe/types" as const;
+/* ---------------------------------------------------------------------------
+ * Auth config
+ * ------------------------------------------------------------------------- */
+
+export interface BSVibeAuthConfig {
+  /** URL of the BSVibe auth app, e.g. 'https://auth.bsvibe.dev' */
+  authUrl: string;
+  /** Callback path on the client app. Default: '/auth/callback' */
+  callbackPath?: string;
+}
+
+/* ---------------------------------------------------------------------------
+ * Legacy single-tenant session shape (BSVibeAuth class)
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Legacy session-cached user shape produced by parseToken().
+ * Kept for backward compatibility with `BSVibeAuth` (token-in-localStorage flow).
+ * The new `useAuth()` hook uses `User` + `Tenant` (richer, multi-tenant) instead.
+ */
+export interface BSVibeUser {
+  id: string;
+  email: string;
+  tenantId: string;
+  role: string;
+  accessToken: string;
+  refreshToken: string;
+  expiresAt: number;
+}
+
+/* ---------------------------------------------------------------------------
+ * Phase 0 P0.6 — multi-tenant session shape
+ *
+ * Mirrors the `/api/session` envelope added in PR #3 (P0.2):
+ *   {
+ *     user: { id, email, name?, avatar_url? },
+ *     tenants: Tenant[],
+ *     active_tenant_id: string | null,
+ *     access_token, refresh_token, expires_in,
+ *   }
+ *
+ * Auth_Design.md §5.1.
+ * ------------------------------------------------------------------------- */
+
+export type TenantRole = 'owner' | 'admin' | 'member' | 'viewer';
+export type TenantPlan = 'free' | 'pro' | 'team' | 'enterprise';
+export type TenantType = 'personal' | 'org';
+
+/** Backwards-compat alias for `TenantPlan` (some consumers import as `Plan`). */
+export type Plan = TenantPlan;
+
+/** Backwards-compat alias for `TenantType` (some consumers import as `Type`). */
+export type Type = TenantType;
+
+export interface Tenant {
+  id: string;
+  name: string;
+  type: TenantType;
+  role: TenantRole;
+  plan: TenantPlan;
+}
+
+export interface User {
+  id: string;
+  email: string;
+  name?: string;
+  avatar_url?: string;
+}
+
+/**
+ * Permission identifier in `<product>.<resource>.<action>` format.
+ * E.g. `bsage.note.read`, `nexus.project.write`, `core.tenant.manage`.
+ *
+ * The client-side helper does a coarse role × plan check for UX gating only;
+ * the server (OpenFGA) is always authoritative. See Auth_Design.md §2.5.
+ */
+export type Permission = string;
+
+/** Response envelope from `GET /api/session`. */
+export interface SessionEnvelope {
+  user: User;
+  tenants: Tenant[];
+  active_tenant_id: string | null;
+  access_token: string;
+  refresh_token: string;
+  expires_in: number;
+}
+
+/** Response from `POST /api/session/switch_tenant`. */
+export interface SwitchTenantResponse {
+  active_tenant_id: string;
+  role: TenantRole;
+}

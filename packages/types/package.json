@@ -1,6 +1,6 @@
 {
   "name": "@bsvibe/types",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Shared TypeScript types for BSVibe products",
   "license": "MIT",
   "type": "module",

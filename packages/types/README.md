@@ -4,17 +4,25 @@ Shared TypeScript types for BSVibe products.
 
 ## Status
 
-Placeholder (Phase A bootstrap, 2026-04-26). Implementation lands in subsequent PR.
+Phase A initial extraction (2026-04-26) — extracted from BSVibe-Auth `js/src/types.ts` (v0.4.0). This package is now the source of truth.
 
-## Planned Exports (Phase A)
+## Exports
 
-- `User` — basic user identity (id, email, displayName)
-- `Tenant`, `TenantMembership` — multi-tenant identity
-- `Permission` — `<resource>.<action>` namespaced strings
-- `ServiceTokenPayload` — P0.7 audience-scoped service JWT claims
-- `SessionEnvelope` — full SSO session shape (user + tenants + active_tenant_id)
-- `BsvibeJwtClaims` — full JWT claim type from BSVibe-Auth `js/` v0.4.0
+- `User` — basic user identity (`id`, `email`, `name?`, `avatar_url?`)
+- `Tenant` — multi-tenant identity (`id`, `name`, `type`, `role`, `plan`)
+- `TenantRole` — `'owner' | 'admin' | 'member' | 'viewer'`
+- `TenantPlan` (alias `Plan`) — `'free' | 'pro' | 'team' | 'enterprise'`
+- `TenantType` (alias `Type`) — `'personal' | 'org'`
+- `Permission` — `<product>.<resource>.<action>` namespaced strings
+- `SessionEnvelope` — `/api/session` response shape
+- `SwitchTenantResponse` — `/api/session/switch_tenant` response
+- `BSVibeAuthConfig`, `BSVibeUser` — legacy single-tenant types
 
-## Source of Truth
+## Roadmap
 
-Initial extraction copies from [`BSVibe-Auth/js/src/types.ts`](https://github.com/BSVibe/BSVibe-Auth) (v0.4.0). After extraction, this package becomes the SoT and BSVibe-Auth re-exports.
+- Phase 0 P0.7 will add `ServiceTokenPayload` (audience-scoped service JWT claims).
+
+## Consumers
+
+- `@bsvibe/auth` (workspace dep)
+- 4 products + bsvibe-site + auth-app (after Phase A migration)

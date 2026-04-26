@@ -1,24 +1,55 @@
 # @bsvibe/auth
 
-BSVibe authentication SDK for Next.js 15 App Router. Wraps `auth.bsvibe.dev` SSO with middleware, Server Actions, and Client Hooks.
+BSVibe authentication SDK — multi-tenant `useAuth` hook + `AuthProvider` + RBAC helper + tenant switching, plus the legacy `BSVibeAuth` redirect client.
 
 ## Status
 
-Placeholder (Phase A bootstrap, 2026-04-26). Implementation lands in subsequent PR per Lockin §A1.
+Phase A initial extraction (2026-04-26, v1.0.0-alpha.0) — extracted from BSVibe-Auth `js/` (v0.4.0). This package is now the source of truth (D9). The standalone `BSVibe-Auth/js/` package will be migrated to a re-export shim in a follow-up PR.
 
-## Planned Surface (Phase A)
+## Surface
 
-```ts
-// Client Component
-import { useAuth, getAccessToken, hasPermission } from "@bsvibe/auth";
+```tsx
+// React app — wrap once at the root.
+import { AuthProvider, useAuth } from "@bsvibe/auth";
 
-// Server Component / Server Action
-import { getServerUser, requirePermission } from "@bsvibe/auth/server";
+<AuthProvider authUrl="https://auth.bsvibe.dev">{children}</AuthProvider>;
 
-// Next.js middleware
-import { createAuthMiddleware } from "@bsvibe/auth/middleware";
+function Profile() {
+  const { user, activeTenant, hasPermission, switchTenant } = useAuth();
+  if (!user) return null;
+  return (
+    <div>
+      {user.email} on {activeTenant?.name}
+      {hasPermission("bsage.note.write") && <NewNoteButton />}
+    </div>
+  );
+}
 ```
 
-## Migration from `BSVibe-Auth/js`
+```ts
+// Imperative tenant switch (also exposed via useAuth().switchTenant).
+import { switchTenant } from "@bsvibe/auth";
+await switchTenant({ authUrl: "https://auth.bsvibe.dev", tenantId: "t-123" });
 
-This package absorbs the existing standalone `@bsvibe/auth` v0.4.0 SDK published from `BSVibe/BSVibe-Auth/js/`. Phase A first PR replaces v0.4.0 → v1.0.0 (major bump per D9). Old redirect-based API stays available with `@deprecated` JSDoc tags.
+// Client-side RBAC hint (server OpenFGA remains authoritative).
+import { hasPermission } from "@bsvibe/auth";
+hasPermission(user, activeTenant, "core.tenant.manage");
+
+// Legacy redirect client (token-in-localStorage flow).
+import { BSVibeAuth } from "@bsvibe/auth";
+const auth = new BSVibeAuth({ authUrl: "https://auth.bsvibe.dev" });
+auth.checkSession();
+```
+
+## Peer dependencies
+
+- `react >= 19`
+- `react-dom >= 19`
+
+## Tests
+
+33 vitest tests covering `hasPermission`, `switchTenant`, and `useAuth` (`AuthProvider` lifecycle, 401 handling, tenant switch, error propagation).
+
+```bash
+pnpm --filter @bsvibe/auth test
+```

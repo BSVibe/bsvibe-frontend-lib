@@ -1,7 +1,7 @@
 {
   "name": "@bsvibe/auth",
-  "version": "0.0.1",
-  "description": "BSVibe authentication SDK (Next.js middleware + Server Action getServerUser + Client Hook useAuth)",
+  "version": "1.0.0-alpha.0",
+  "description": "BSVibe authentication SDK — multi-tenant useAuth hook + AuthProvider + hasPermission + switchTenant + legacy BSVibeAuth client",
   "license": "MIT",
   "type": "module",
   "main": "dist/index.js",
@@ -27,21 +27,30 @@
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint src",
-    "test": "echo \"(no tests yet — placeholder)\" && exit 0",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "clean": "rm -rf dist .tsbuildinfo *.tsbuildinfo"
   },
   "dependencies": {
     "@bsvibe/types": "workspace:*"
   },
   "peerDependencies": {
-    "next": ">=15.0.0",
-    "react": ">=19.0.0"
+    "react": ">=19.0.0",
+    "react-dom": ">=19.0.0"
   },
   "peerDependenciesMeta": {
-    "next": { "optional": true },
-    "react": { "optional": true }
+    "react": { "optional": false },
+    "react-dom": { "optional": false }
   },
   "devDependencies": {
-    "typescript": "^5.6.0"
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/react": "^19.2.14",
+    "@vitejs/plugin-react": "^6.0.1",
+    "jsdom": "^29.0.2",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "typescript": "^5.6.0",
+    "vitest": "^4.1.3"
   }
 }

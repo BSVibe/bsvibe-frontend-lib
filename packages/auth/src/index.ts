@@ -1,14 +1,40 @@
 /**
- * @bsvibe/auth — placeholder.
+ * @bsvibe/auth — BSVibe authentication SDK.
  *
- * Phase A 후속에서 본 구현 통합:
- *  - 기존 BSVibe-Auth `js/` (`@bsvibe/auth` v0.4.0) SDK 흡수 (D9: major bump)
- *  - Next.js 15 middleware (auth.bsvibe.dev silent SSO)
- *  - Server Action `getServerUser()`
- *  - Client Hook `useAuth()` + `getAccessToken()`
- *  - `hasPermission()` (D8 통합 JWT claim 기반)
+ * Phase A: extracted from BSVibe-Auth `js/` (v0.4.0) as the single source of truth.
  *
- * See https://github.com/BSVibe/BSVibe-Auth/tree/main/js for current v0.4.0 implementation.
+ * Exports:
+ * - `BSVibeAuth` — legacy single-tenant token-in-localStorage client (redirect SSO).
+ * - `AuthProvider` + `useAuth()` — multi-tenant React hook (Phase 0 P0.6).
+ * - `hasPermission()` — client-side RBAC hint.
+ * - `switchTenant()` — POST `/api/session/switch_tenant`.
+ *
+ * Type-only re-exports come from `@bsvibe/types`.
  */
 
-export const _placeholder = "@bsvibe/auth" as const;
+// Legacy single-tenant token-in-localStorage client.
+export { BSVibeAuth } from './client';
+
+// Phase 0 P0.6 — multi-tenant React hook + helpers.
+export { AuthProvider, useAuth } from './useAuth';
+export type { UseAuthValue } from './useAuth';
+export { hasPermission } from './permissions';
+export { switchTenant } from './switchTenant';
+export type { SwitchTenantOptions } from './switchTenant';
+
+// Re-export shared public types from @bsvibe/types so existing
+// `import { User, Tenant, ... } from '@bsvibe/auth'` paths keep working.
+export type {
+  BSVibeAuthConfig,
+  BSVibeUser,
+  Permission,
+  SessionEnvelope,
+  SwitchTenantResponse,
+  Tenant,
+  TenantPlan,
+  TenantRole,
+  TenantType,
+  Plan,
+  Type,
+  User,
+} from '@bsvibe/types';
