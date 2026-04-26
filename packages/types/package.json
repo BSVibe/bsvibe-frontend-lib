@@ -1,0 +1,36 @@
+{
+  "name": "@bsvibe/types",
+  "version": "0.0.1",
+  "description": "Shared TypeScript types for BSVibe products",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BSVibe/bsvibe-frontend-lib.git",
+    "directory": "packages/types"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint src",
+    "test": "echo \"(no tests yet — placeholder)\" && exit 0",
+    "clean": "rm -rf dist .tsbuildinfo *.tsbuildinfo"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0"
+  }
+}

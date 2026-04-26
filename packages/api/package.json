@@ -1,0 +1,48 @@
+{
+  "name": "@bsvibe/api",
+  "version": "0.0.1",
+  "description": "BSVibe API client — Server fetch (RSC) + Server Action wrapper + Vercel→Route Handler adapter",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BSVibe/bsvibe-frontend-lib.git",
+    "directory": "packages/api"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint src",
+    "test": "echo \"(no tests yet — placeholder)\" && exit 0",
+    "clean": "rm -rf dist .tsbuildinfo *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@bsvibe/auth": "workspace:*",
+    "@bsvibe/types": "workspace:*"
+  },
+  "peerDependencies": {
+    "next": ">=15.0.0",
+    "react": ">=19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "next": { "optional": true },
+    "react": { "optional": true }
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0"
+  }
+}

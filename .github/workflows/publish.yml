@@ -1,0 +1,64 @@
+name: Publish to GitHub Packages
+
+# Triggered on tag push (vX.Y.Z) or release.
+# Requires repo-level NPM_TOKEN secret (org-scoped PAT with write:packages).
+# See README "Publishing" section.
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - types
+          - auth
+          - design-tokens
+          - layout
+          - ui
+          - api
+          - i18n
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@bsvibe"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile=false
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN || secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Build (${{ matrix.package }})
+        run: pnpm --filter "@bsvibe/${{ matrix.package }}" run build
+
+      - name: Publish (${{ matrix.package }})
+        working-directory: packages/${{ matrix.package }}
+        run: pnpm publish --no-git-checks --access restricted
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN || secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN || secrets.GITHUB_TOKEN }}

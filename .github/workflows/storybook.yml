@@ -1,0 +1,71 @@
+name: Storybook (GitHub Pages)
+
+# Decision #13 (BSVibe_Execution_Lockin §3): Storybook host = GitHub Pages.
+# Phase A 후속 PR에서 @bsvibe/ui Storybook config 추가 시 활성화.
+# 현재 placeholder — main push 시 stub job만 실행 (실패하지 않음).
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: storybook
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile=false
+        env:
+          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Storybook (placeholder)
+        # Phase A 후속에서 실제 build:
+        #   run: pnpm --filter "@bsvibe/ui" run build-storybook
+        run: |
+          mkdir -p packages/ui/storybook-static
+          cat > packages/ui/storybook-static/index.html <<EOF
+          <!doctype html>
+          <html><head><meta charset="utf-8"><title>BSVibe Storybook (placeholder)</title></head>
+          <body style="font-family:system-ui;max-width:48rem;margin:4rem auto;padding:0 1rem">
+          <h1>BSVibe Storybook</h1>
+          <p>Placeholder — Phase A subsequent PR will add @bsvibe/ui components and Storybook configuration.</p>
+          </body></html>
+          EOF
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: packages/ui/storybook-static
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
