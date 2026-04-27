@@ -83,4 +83,15 @@ describe('<Button>', () => {
     render(<Button ref={ref}>Save</Button>);
     expect(ref.current).toBeInstanceOf(HTMLButtonElement);
   });
+
+  // Phase B Batch 1 — touch targets
+
+  it.each(['sm', 'md', 'lg'] as const)(
+    'size=%s applies a min-h-[44px] touch target (mobile a11y)',
+    (size) => {
+      render(<Button size={size}>X</Button>);
+      // WCAG 2.5.5 / iOS HIG: every interactive button is ≥ 44px tall.
+      expect(screen.getByRole('button').className).toMatch(/min-h-\[44px\]|min-h-11/);
+    },
+  );
 });

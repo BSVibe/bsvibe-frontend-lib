@@ -74,4 +74,17 @@ describe('<Input>', () => {
     render(<Input className="extra-class" data-testid="x" />);
     expect(screen.getByTestId('x').className).toMatch(/extra-class/);
   });
+
+  // Phase B Batch 1 — mobile enhancements
+
+  it('applies a 16px font-size class to avoid iOS Safari auto-zoom on focus', () => {
+    render(<Input data-testid="x" />);
+    // Tailwind text-base = 1rem = 16px. iOS only zooms < 16px inputs.
+    expect(screen.getByTestId('x').className).toMatch(/text-base/);
+  });
+
+  it('applies a min-h-[44px] touch target (WCAG 2.5.5)', () => {
+    render(<Input data-testid="x" />);
+    expect(screen.getByTestId('x').className).toMatch(/min-h-\[44px\]|min-h-11/);
+  });
 });

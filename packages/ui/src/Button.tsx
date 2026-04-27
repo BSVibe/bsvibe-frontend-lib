@@ -34,8 +34,12 @@ const SIZE_CLASSES: Record<ButtonSize, string> = {
   lg: 'px-5 py-2.5 text-base',
 };
 
+// Phase B Batch 1: every interactive button gets a 44px tap target by default
+// (WCAG 2.5.5 / iOS HIG). Visual height stays controlled by SIZE_CLASSES'
+// padding — the min-h floor only kicks in when content+padding < 44px (sm).
 const BASE =
   'inline-flex items-center justify-center gap-2 rounded-md font-semibold transition-all ' +
+  'min-h-[44px] ' +
   'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950 ' +
   'disabled:opacity-50 disabled:cursor-not-allowed';
 

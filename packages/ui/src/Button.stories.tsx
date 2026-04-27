@@ -66,3 +66,18 @@ export const VariantsRow: Story = {
     </div>
   ),
 };
+
+// Phase B Batch 1 — touch target story (mobile a11y check).
+export const MobileTouchTarget: Story = {
+  parameters: { viewport: { defaultViewport: 'mobile1' } },
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <p style={{ color: '#94a3b8', fontSize: 12 }}>
+        Every size honors a 44px minimum tap height (WCAG 2.5.5).
+      </p>
+      <Button size="sm">Small (sm)</Button>
+      <Button size="md">Medium (md)</Button>
+      <Button size="lg">Large (lg)</Button>
+    </div>
+  ),
+};

@@ -53,4 +53,34 @@ describe('AppShell', () => {
     const root = container.firstChild as HTMLElement;
     expect(root.className).toContain('custom-cls');
   });
+
+  // Phase B Batch 1 — mobile responsive enhancements
+
+  it('applies the bsvibe-appshell utility class hook on the root container', () => {
+    const { container } = render(
+      <AppShell sidebar={<nav />}>
+        <p>x</p>
+      </AppShell>,
+    );
+    const root = container.firstChild as HTMLElement;
+    expect(root.className).toContain('bsvibe-appshell');
+  });
+
+  it('renders the column wrapper with the bsvibe-appshell__column hook', () => {
+    const { container } = render(
+      <AppShell sidebar={<nav />}>
+        <p>x</p>
+      </AppShell>,
+    );
+    expect(container.querySelector('.bsvibe-appshell__column')).not.toBeNull();
+  });
+
+  it('main slot uses the bsvibe-appshell__main hook (responsive padding target)', () => {
+    render(
+      <AppShell sidebar={<nav />}>
+        <p>x</p>
+      </AppShell>,
+    );
+    expect(screen.getByRole('main').className).toContain('bsvibe-appshell__main');
+  });
 });

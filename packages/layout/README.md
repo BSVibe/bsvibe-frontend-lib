@@ -2,15 +2,24 @@
 
 Next.js 15 App Router layout primitives shared by every BSVibe product.
 
-## What's in 0.1.0
+## What's in 0.2.0
 
 | Export | Kind | Purpose |
 |---|---|---|
 | `<AppShell>` | RSC | Root wrapper: sidebar slot + optional header slot + `<main>{children}</main>`. No client state. |
 | `<Header>` | RSC | Banner row with title + right slot (user menu, status pill, etc). |
-| `<ResponsiveSidebar>` | Client | Collapsible primary nav. `next/link` + `usePathname` based active state. Hamburger + backdrop for mobile. |
+| `<ResponsiveSidebar>` | Client | Collapsible primary nav. `next/link` + `usePathname` based active state. Mobile drawer (overlay + 44px tap targets + Escape close + controlled mode), inline rail on `md:`+. |
 | `<ProtectedRoute>` | Client | Auth gate. `useEffect + router.replace` (never navigates during render). |
 | `makeAuthedLayout({...})` | factory | Returns the canonical `app/(authed)/layout.tsx` component (auth gate + AppShell composition). |
+
+### Phase B Batch 1 — mobile responsive
+
+`<ResponsiveSidebar>` is now a real mobile drawer:
+
+* below the `md:` breakpoint the aside is `fixed inset-y-0 left-0 -translate-x-full` and slides in via a `transform` transition;
+* an overlay backdrop, an explicit Close button, the Escape key, and clicking any nav link all close it;
+* every interactive surface (hamburger, close, nav links) is a `min-h-[44px] min-w-[44px]` tap target (WCAG 2.5.5);
+* `defaultOpen` opens the drawer at mount; pass `open` + `onOpenChange` for fully controlled mode (e.g. when the hamburger lives inside `<Header>`).
 
 ## Usage
 

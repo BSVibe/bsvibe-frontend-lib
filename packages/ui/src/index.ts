@@ -30,5 +30,11 @@ export type { InputProps } from './Input.js';
 export { Card, CardHeader, CardBody, CardFooter } from './Card.js';
 export type { CardProps } from './Card.js';
 
+export { ResponsiveTable } from './ResponsiveTable.js';
+export type {
+  ResponsiveTableProps,
+  ResponsiveTableColumn,
+} from './ResponsiveTable.js';
+
 export { cn } from './cn.js';
 export type { ClassValue } from './cn.js';

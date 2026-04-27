@@ -115,4 +115,20 @@ describe('<Modal>', () => {
     );
     expect(document.body.style.overflow).toBe('');
   });
+
+  // Phase B Batch 1 — mobile-friendly modal
+
+  it('panel goes full-screen on mobile (< sm) but constrained on >= sm', () => {
+    render(
+      <Modal open onClose={() => {}} title="t">
+        body
+      </Modal>,
+    );
+    const dialog = screen.getByRole('dialog');
+    // Mobile: full viewport. Desktop: rounded panel with max width.
+    // We assert the utility classes are present — visual breakpoint is CSS.
+    expect(dialog.className).toMatch(/w-full/);
+    expect(dialog.className).toMatch(/h-full|h-\[100dvh\]|max-h-\[100dvh\]/);
+    expect(dialog.className).toMatch(/sm:w-\[|sm:max-w-|sm:rounded-xl/);
+  });
 });

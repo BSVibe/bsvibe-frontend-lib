@@ -27,9 +27,17 @@ export interface ModalProps {
   panelClassName?: string;
 }
 
+// Phase B Batch 1 — mobile-friendly panel:
+//   • Mobile (< sm): fills the viewport (`w-full h-full`) with no rounded
+//     corners — gives a familiar full-screen sheet on phones.
+//   • Desktop (>= sm): rounded card capped at the `width` prop, with rounded
+//     corners and a max-height ceiling. Width is plumbed via the
+//     `--bsvibe-modal-width` CSS var so the same `style={...}` value can be
+//     gated by the sm: breakpoint.
 const PANEL_BASE =
-  'relative bg-gray-900 rounded-xl shadow-lg border border-gray-800 ' +
-  'w-[90vw] max-h-[85vh] flex flex-col';
+  'relative bg-gray-900 shadow-lg border border-gray-800 flex flex-col ' +
+  'w-full h-full max-h-[100dvh] ' +
+  'sm:rounded-xl sm:w-[var(--bsvibe-modal-width)] sm:max-w-[90vw] sm:h-auto sm:max-h-[85vh]';
 
 const HEADER =
   'flex items-center justify-between px-6 py-4 border-b border-gray-800';
@@ -95,7 +103,10 @@ export function Modal({
         aria-modal="true"
         aria-labelledby={titleId}
         className={cn(PANEL_BASE, panelClassName)}
-        style={{ width }}
+        // `width` is honored only on desktop (>= sm). On mobile the panel
+        // fills the viewport via the Tailwind classes in PANEL_BASE.
+        // CSS custom property lets the sm: utility pick it up.
+        style={{ ['--bsvibe-modal-width' as string]: `${width}px` }}
       >
         <div className={HEADER}>
           <h2 id={titleId} className="text-lg font-bold text-gray-50">

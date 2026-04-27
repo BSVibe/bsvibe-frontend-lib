@@ -50,3 +50,14 @@ export const Disabled: Story = {
 export const NoLabel: Story = {
   args: { placeholder: 'search…' },
 };
+
+// Phase B Batch 1 — mobile a11y story.
+export const MobileNoZoom: Story = {
+  parameters: { viewport: { defaultViewport: 'mobile1' } },
+  args: {
+    label: 'Email',
+    type: 'email',
+    placeholder: 'you@example.com',
+    helperText: '16px font + 44px height — iOS Safari does not auto-zoom.',
+  },
+};

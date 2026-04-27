@@ -137,3 +137,36 @@ export const NoFooter: Story = {
     />
   ),
 };
+
+// Phase B Batch 1 — mobile/desktop variants
+
+export const MobileFullScreen: Story = {
+  parameters: { viewport: { defaultViewport: 'mobile1' } },
+  render: () => (
+    <Demo
+      title="Mobile sheet"
+      body={
+        <p style={{ color: 'var(--text-primary)' }}>
+          On viewports below sm (~640px) the modal occupies the full viewport
+          for a familiar phone-app feel. On desktop it stays a centered card.
+        </p>
+      }
+    />
+  ),
+};
+
+export const DesktopCard: Story = {
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+  render: () => (
+    <Demo
+      title="Desktop card"
+      body={
+        <p style={{ color: 'var(--text-primary)' }}>
+          On desktop the panel is constrained by the `width` prop with rounded
+          corners and a max-height ceiling.
+        </p>
+      }
+      width={520}
+    />
+  ),
+};
