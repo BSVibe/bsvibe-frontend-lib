@@ -1,0 +1,12 @@
+@import "tailwindcss";
+@import "@bsvibe/design-tokens/css";
+
+/* Apply BSVibe dark surface globally inside Storybook canvas. */
+html,
+body,
+#storybook-root {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+}
