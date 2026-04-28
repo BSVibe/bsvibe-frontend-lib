@@ -57,7 +57,18 @@ jobs:
 
       - name: Publish (${{ matrix.package }})
         working-directory: packages/${{ matrix.package }}
-        run: pnpm publish --no-git-checks --access restricted
+        run: |
+          set +e
+          OUT=$(pnpm publish --no-git-checks --access restricted 2>&1)
+          STATUS=$?
+          echo "$OUT"
+          if [ $STATUS -ne 0 ]; then
+            if echo "$OUT" | grep -q "Cannot publish over existing version"; then
+              echo "::notice::Version already published, skipping (idempotent)"
+              exit 0
+            fi
+            exit $STATUS
+          fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN || secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN || secrets.GITHUB_TOKEN }}
