@@ -52,8 +52,8 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN || secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN || secrets.GITHUB_TOKEN }}
 
-      - name: Build (${{ matrix.package }})
-        run: pnpm --filter "@bsvibe/${{ matrix.package }}" run build
+      - name: Build (${{ matrix.package }} + dependencies)
+        run: pnpm --filter "@bsvibe/${{ matrix.package }}..." run build
 
       - name: Publish (${{ matrix.package }})
         working-directory: packages/${{ matrix.package }}
