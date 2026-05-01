@@ -1,6 +1,6 @@
 {
   "name": "@bsvibe/design-tokens",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "BSVibe design tokens — TypeScript source of truth + Tailwind 4 @theme CSS variables (gray/brand/alias/Material 3)",
   "license": "MIT",
   "type": "module",

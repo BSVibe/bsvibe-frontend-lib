@@ -1,6 +1,6 @@
 {
   "name": "@bsvibe/layout",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "BSVibe shared layouts — AppShell + ResponsiveSidebar + Header + ProtectedRoute + (authed) layout factory (Next.js 15 App Router)",
   "license": "MIT",
   "type": "module",

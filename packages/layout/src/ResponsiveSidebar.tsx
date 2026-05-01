@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState, type ReactNode } from 'react';
+import { Fragment, useCallback, useEffect, useState, type ReactNode } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -11,6 +11,12 @@ export interface SidebarItem {
   label: ReactNode;
   /** Optional leading icon (e.g. material-symbols span). */
   icon?: ReactNode;
+  /**
+   * Optional group label. Consecutive items sharing the same `groupLabel`
+   * render once as a small uppercase header above the first item of the
+   * group. Items without a `groupLabel` render with no header injection.
+   */
+  groupLabel?: string;
 }
 
 export interface ResponsiveSidebarProps {
@@ -20,6 +26,12 @@ export interface ResponsiveSidebarProps {
   logo?: ReactNode;
   /** Optional bottom-of-sidebar slot (user card, logout, etc). */
   footer?: ReactNode;
+  /**
+   * Optional CTA / action slot rendered between the topbar and the nav.
+   * Useful for product-specific calls to action (e.g. BSage "+ New Session").
+   * When omitted, no wrapper element is rendered.
+   */
+  topAction?: ReactNode;
   /** ARIA label for the `<aside>`. Default: "Primary navigation". */
   ariaLabel?: string;
   /** Extra class merged onto the root `<aside>`. */
@@ -71,6 +83,7 @@ export function ResponsiveSidebar({
   items,
   logo,
   footer,
+  topAction,
   ariaLabel = 'Primary navigation',
   className,
   defaultOpen = false,
@@ -164,12 +177,21 @@ export function ResponsiveSidebar({
           </button>
         </div>
 
+        {topAction !== undefined && topAction !== null ? (
+          <div className="bsvibe-sidebar__top-action px-3 py-3 border-b border-gray-800">
+            {topAction}
+          </div>
+        ) : null}
+
         <nav
           className="bsvibe-sidebar__nav flex-1 overflow-y-auto px-2 py-2"
           aria-label={ariaLabel}
         >
-          {items.map((item) => {
+          {items.map((item, idx) => {
             const active = isActivePath(item.href, pathname);
+            const prevGroup = idx > 0 ? items[idx - 1]!.groupLabel : undefined;
+            const showGroupHeader =
+              item.groupLabel !== undefined && item.groupLabel !== prevGroup;
             const itemCls = [
               'bsvibe-sidebar__item',
               TAP_TARGET,
@@ -177,24 +199,30 @@ export function ResponsiveSidebar({
               'hover:bg-gray-800 active:bg-gray-700',
               'focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500',
               active
-                ? 'bsvibe-sidebar__item--active bg-gray-800 text-gray-50 font-semibold'
-                : null,
+                ? 'bsvibe-sidebar__item--active border-l-4 border-[var(--color-accent)] bg-[color-mix(in_srgb,var(--color-accent)_10%,transparent)] text-gray-50 font-semibold'
+                : 'border-l-4 border-transparent',
             ]
               .filter(Boolean)
               .join(' ');
             return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                aria-current={active ? 'page' : undefined}
-                className={itemCls}
-              >
-                {item.icon !== undefined && item.icon !== null ? (
-                  <span className="bsvibe-sidebar__item-icon">{item.icon}</span>
+              <Fragment key={item.href}>
+                {showGroupHeader ? (
+                  <div className="bsvibe-sidebar__group-label px-3 py-2 text-xs uppercase tracking-widest text-gray-400">
+                    {item.groupLabel}
+                  </div>
                 ) : null}
-                <span className="bsvibe-sidebar__item-label">{item.label}</span>
-              </Link>
+                <Link
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  aria-current={active ? 'page' : undefined}
+                  className={itemCls}
+                >
+                  {item.icon !== undefined && item.icon !== null ? (
+                    <span className="bsvibe-sidebar__item-icon">{item.icon}</span>
+                  ) : null}
+                  <span className="bsvibe-sidebar__item-label">{item.label}</span>
+                </Link>
+              </Fragment>
             );
           })}
         </nav>
