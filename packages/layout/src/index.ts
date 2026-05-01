@@ -20,6 +20,12 @@ export type { HeaderProps } from './Header';
 export { ResponsiveSidebar } from './ResponsiveSidebar';
 export type { ResponsiveSidebarProps, SidebarItem } from './ResponsiveSidebar';
 
+export { SidebarBrand } from './SidebarBrand';
+export type { SidebarBrandProps } from './SidebarBrand';
+
+export { SidebarUserCard } from './SidebarUserCard';
+export type { SidebarUserCardProps } from './SidebarUserCard';
+
 export { ProtectedRoute } from './ProtectedRoute';
 export type { ProtectedRouteProps } from './ProtectedRoute';
 

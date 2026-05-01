@@ -112,6 +112,29 @@
   /* Default accent (BSNexus). Each product overrides via its own :root. */
   --accent: #3b82f6;
 
+  /*
+   * Semantic accent — products override per signature color in their own
+   * `:root {}` block. Unlike the `@theme {}` shadow vars above (which
+   * generate Tailwind utilities such as `bg-accent`), these `:root`
+   * declarations are consumed directly via `var(--color-accent)` from
+   * hand-authored CSS / inline styles (e.g. SidebarBrand name color,
+   * SidebarUserCard avatar, ResponsiveSidebar active border).
+   *
+   * Per-product override pattern (in the product app's globals.css):
+   *
+   *   :root { --color-accent: #f59e0b; }   // BSGateway amber
+   *   :root { --color-accent: #f43f5e; }   // BSupervisor rose
+   *   :root { --color-accent: #10b981; }   // BSage emerald
+   *   :root { --color-accent: #3b82f6; }   // BSNexus blue (default)
+   *
+   * `--color-accent-hover` and `--color-accent-bg-soft` are derived from
+   * `--color-accent` via `color-mix()`, so a product only needs to
+   * declare `--color-accent` and the rest follow automatically.
+   */
+  --color-accent: #3b82f6;
+  --color-accent-hover: color-mix(in srgb, var(--color-accent) 80%, white);
+  --color-accent-bg-soft: color-mix(in srgb, var(--color-accent) 10%, transparent);
+
   /* Motion */
   --duration-fast: 100ms;
   --duration-normal: 200ms;

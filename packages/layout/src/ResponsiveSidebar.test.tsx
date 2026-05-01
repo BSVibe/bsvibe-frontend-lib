@@ -185,4 +185,74 @@ describe('ResponsiveSidebar', () => {
     fireEvent.click(screen.getByTestId('bsvibe-sidebar-backdrop'));
     expect(handler).toHaveBeenCalledWith(false);
   });
+
+  // Sidebar unification — Stage L additions
+
+  it('renders topAction node between the topbar and the nav when provided', () => {
+    const { container } = render(
+      <ResponsiveSidebar
+        items={ITEMS}
+        defaultOpen
+        topAction={<button data-testid="cta">+ New Session</button>}
+      />,
+    );
+    expect(screen.getByTestId('cta')).toBeInTheDocument();
+    // Wrapper class ensures positioning between topbar and nav.
+    const wrapper = container.querySelector('.bsvibe-sidebar__top-action');
+    expect(wrapper).not.toBeNull();
+  });
+
+  it('does NOT render the topAction wrapper when topAction is omitted', () => {
+    const { container } = render(<ResponsiveSidebar items={ITEMS} defaultOpen />);
+    expect(container.querySelector('.bsvibe-sidebar__top-action')).toBeNull();
+  });
+
+  it('emits a group label header before the first item of a new group', () => {
+    const grouped: SidebarItem[] = [
+      { href: '/dashboard', label: 'Dashboard' },
+      { href: '/projects/a', label: 'Project A', groupLabel: 'Projects' },
+      { href: '/projects/b', label: 'Project B', groupLabel: 'Projects' },
+      { href: '/projects/new', label: 'New Project', groupLabel: 'Projects' },
+    ];
+    const { container } = render(<ResponsiveSidebar items={grouped} defaultOpen />);
+    // Exactly one group header — same groupLabel does not repeat.
+    const headers = container.querySelectorAll('.bsvibe-sidebar__group-label');
+    expect(headers).toHaveLength(1);
+    expect(headers[0]).toHaveTextContent('Projects');
+  });
+
+  it('emits a new group label header at every group boundary', () => {
+    const grouped: SidebarItem[] = [
+      { href: '/a', label: 'A', groupLabel: 'Group One' },
+      { href: '/b', label: 'B', groupLabel: 'Group Two' },
+    ];
+    const { container } = render(<ResponsiveSidebar items={grouped} defaultOpen />);
+    const headers = container.querySelectorAll('.bsvibe-sidebar__group-label');
+    expect(headers).toHaveLength(2);
+    expect(headers[0]).toHaveTextContent('Group One');
+    expect(headers[1]).toHaveTextContent('Group Two');
+  });
+
+  it('does NOT inject a header for items without a groupLabel', () => {
+    const { container } = render(<ResponsiveSidebar items={ITEMS} defaultOpen />);
+    expect(container.querySelectorAll('.bsvibe-sidebar__group-label')).toHaveLength(0);
+  });
+
+  it('active item uses the border-l-4 + accent var pattern (no bg-gray-800 on active)', () => {
+    mockUsePathname.mockReturnValue('/projects');
+    render(<ResponsiveSidebar items={ITEMS} defaultOpen />);
+    const projectsLink = screen.getByRole('link', { name: 'Projects' });
+    expect(projectsLink.className).toMatch(/border-l-4/);
+    expect(projectsLink.className).toMatch(/border-\[var\(--color-accent\)\]/);
+    // Active state must NOT use the legacy bg-gray-800 utility.
+    expect(projectsLink.className).not.toMatch(/(?:^|\s)bg-gray-800(?:$|\s)/);
+  });
+
+  it('inactive items get a transparent border to prevent layout shift', () => {
+    mockUsePathname.mockReturnValue('/projects');
+    render(<ResponsiveSidebar items={ITEMS} defaultOpen />);
+    const dashLink = screen.getByRole('link', { name: 'Dashboard' });
+    expect(dashLink.className).toMatch(/border-l-4/);
+    expect(dashLink.className).toMatch(/border-transparent/);
+  });
 });
