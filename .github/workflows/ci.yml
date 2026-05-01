@@ -20,6 +20,7 @@ jobs:
           - ui
           - api
           - i18n
+          - audit-ui
 
     steps:
       - uses: actions/checkout@v4
@@ -38,8 +39,8 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build (${{ matrix.package }})
-        run: pnpm --filter "@bsvibe/${{ matrix.package }}" run build
+      - name: Build (${{ matrix.package }} + workspace deps)
+        run: pnpm --filter "@bsvibe/${{ matrix.package }}..." run build
 
       - name: Typecheck (${{ matrix.package }})
         run: pnpm --filter "@bsvibe/${{ matrix.package }}" run typecheck
