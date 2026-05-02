@@ -26,6 +26,9 @@ export type { SidebarBrandProps } from './SidebarBrand';
 export { SidebarUserCard } from './SidebarUserCard';
 export type { SidebarUserCardProps } from './SidebarUserCard';
 
+export { LanguageToggle } from './LanguageToggle';
+export type { LanguageToggleProps, LanguageToggleOption } from './LanguageToggle';
+
 export { ProtectedRoute } from './ProtectedRoute';
 export type { ProtectedRouteProps } from './ProtectedRoute';
 
