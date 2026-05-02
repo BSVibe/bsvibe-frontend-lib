@@ -141,6 +141,20 @@ describe('ResponsiveSidebar', () => {
     expect(trigger.className).toMatch(/min-w-\[44px\]|min-w-11/);
   });
 
+  it('hamburger pins to top-left corner via fixed positioning (mobile UX consistency)', () => {
+    // Without fixed positioning the trigger renders inline at the top of the
+    // consumer's flex/grid flow — BSGateway ended up with the hamburger
+    // mid-page and BSNexus at the bottom. Lib is the SoT for placement.
+    render(<ResponsiveSidebar items={ITEMS} />);
+    const trigger = screen.getByRole('button', { name: /open navigation/i });
+    expect(trigger.className).toMatch(/\bfixed\b/);
+    expect(trigger.className).toMatch(/\btop-3\b/);
+    expect(trigger.className).toMatch(/\bleft-3\b/);
+    // z-index must beat the drawer (z-40) and backdrop (z-30) so the trigger
+    // is always tappable on top.
+    expect(trigger.className).toMatch(/\bz-50\b/);
+  });
+
   it('nav links have min 44px tap target (touch a11y)', () => {
     render(<ResponsiveSidebar items={ITEMS} defaultOpen />);
     const link = screen.getByRole('link', { name: 'Projects' });
