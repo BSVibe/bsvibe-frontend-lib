@@ -29,6 +29,9 @@ export type { SidebarUserCardProps } from './SidebarUserCard';
 export { LanguageToggle } from './LanguageToggle';
 export type { LanguageToggleProps, LanguageToggleOption } from './LanguageToggle';
 
+export { SidebarTenantSwitcher } from './SidebarTenantSwitcher';
+export type { SidebarTenantSwitcherProps, SidebarTenant } from './SidebarTenantSwitcher';
+
 export { ProtectedRoute } from './ProtectedRoute';
 export type { ProtectedRouteProps } from './ProtectedRoute';
 
