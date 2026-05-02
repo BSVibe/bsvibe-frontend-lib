@@ -132,13 +132,16 @@ export function ResponsiveSidebar({
 
   return (
     <>
-      {/* Hamburger trigger — hidden on md+ (desktop has inline rail). */}
+      {/* Hamburger trigger — hidden on md+ (desktop has inline rail).
+          Pinned `fixed top-3 left-3 z-50` so consumers don't need their own CSS;
+          z-50 beats the drawer (z-40) + backdrop (z-30) so the tap target is
+          always reachable on top of either layer. */}
       <button
         type="button"
         aria-label="Open navigation"
         aria-expanded={open}
         aria-controls="bsvibe-sidebar-drawer"
-        className={`bsvibe-sidebar__hamburger ${TAP_TARGET} md:hidden inline-flex items-center justify-center rounded-md text-gray-100 hover:bg-gray-800 active:bg-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500`}
+        className={`bsvibe-sidebar__hamburger ${TAP_TARGET} md:hidden fixed top-3 left-3 z-50 inline-flex items-center justify-center rounded-md text-gray-100 hover:bg-gray-800 active:bg-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500`}
         onClick={() => setOpen(true)}
       >
         <span aria-hidden="true">☰</span>
