@@ -52,6 +52,15 @@ export interface SmokeSuiteOptions {
    * Default: ``/login/i``.
    */
   loginPath?: RegExp;
+  /**
+   * Tenant isolation model for this product:
+   * - ``"per-visitor"`` (default): each /demo/session call gets a unique
+   *   tenant_id. The isolation test asserts two contexts get different ids.
+   * - ``"shared"``: all visitors share a single demo tenant (used by
+   *   read-mostly showcase products like BSupervisor and BSage). The
+   *   isolation test inverts and asserts the same tenant_id is returned.
+   */
+  tenantModel?: "per-visitor" | "shared";
 }
 
 export function runDemoSmokeSuite(opts: SmokeSuiteOptions): void {
@@ -60,6 +69,7 @@ export function runDemoSmokeSuite(opts: SmokeSuiteOptions): void {
     baseUrl,
     apiUrl,
     loginPath = /\/login(\b|\/)/i,
+    tenantModel = "per-visitor",
   } = opts;
 
   test.describe(`@demo ${product} smoke`, () => {
@@ -91,7 +101,11 @@ export function runDemoSmokeSuite(opts: SmokeSuiteOptions): void {
       });
     });
 
-    test("two browser contexts get isolated tenant_ids", async ({ browser }: { browser: Browser }) => {
+    const isolationLabel =
+      tenantModel === "shared"
+        ? "two browser contexts share the same demo tenant_id"
+        : "two browser contexts get isolated tenant_ids";
+    test(isolationLabel, async ({ browser }: { browser: Browser }) => {
       const ctxA = await browser.newContext();
       const ctxB = await browser.newContext();
       try {
@@ -103,7 +117,13 @@ export function runDemoSmokeSuite(opts: SmokeSuiteOptions): void {
         expect(b.status()).toBe(201);
         const bodyA = (await a.json()) as { tenant_id: string };
         const bodyB = (await b.json()) as { tenant_id: string };
-        expect(bodyA.tenant_id).not.toBe(bodyB.tenant_id);
+        if (tenantModel === "shared") {
+          expect(bodyA.tenant_id, "shared-tenant products must return one demo tenant for all visitors").toBe(
+            bodyB.tenant_id,
+          );
+        } else {
+          expect(bodyA.tenant_id).not.toBe(bodyB.tenant_id);
+        }
       } finally {
         await ctxA.close();
         await ctxB.close();
