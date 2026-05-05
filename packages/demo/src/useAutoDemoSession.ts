@@ -1,14 +1,33 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+export interface DemoSessionReady {
+  tenantId: string;
+  token: string;
+  expiresIn: number;
+}
 
 export interface DemoSessionState {
   /** True while the initial POST /api/v1/demo/session is in flight. */
   loading: boolean;
   /** Active demo tenant_id (UUID string) once the session is ready. */
   tenantId: string | null;
+  /** Demo JWT (HS256, 2h exp). Use as Bearer token for API calls. */
+  token: string | null;
   /** Token TTL in seconds (typically 7200 = 2h). */
   expiresIn: number | null;
   /** Set when session creation failed. */
   error: string | null;
+}
+
+export interface UseAutoDemoSessionOptions {
+  /**
+   * Optional callback fired exactly once when the session is ready.
+   * Use this to stash the demo JWT in the product's existing token
+   * cache so `getAccessToken()` (or equivalent) returns it. Without
+   * this hook-up, browser-side data fetches go out without
+   * Authorization and the demo dashboard sits empty.
+   */
+  onSessionReady?: (session: DemoSessionReady) => void;
 }
 
 /**
@@ -19,13 +38,19 @@ export interface DemoSessionState {
  * Pass the API base URL (e.g. `https://api-demo-gateway.bsvibe.dev`).
  * Credentials must be sent so cookies cross subdomains.
  */
-export function useAutoDemoSession(apiBaseUrl: string): DemoSessionState {
+export function useAutoDemoSession(
+  apiBaseUrl: string,
+  options: UseAutoDemoSessionOptions = {},
+): DemoSessionState {
   const [state, setState] = useState<DemoSessionState>({
     loading: true,
     tenantId: null,
+    token: null,
     expiresIn: null,
     error: null,
   });
+  const onReadyRef = useRef(options.onSessionReady);
+  onReadyRef.current = options.onSessionReady;
 
   useEffect(() => {
     let cancelled = false;
@@ -43,20 +68,34 @@ export function useAutoDemoSession(apiBaseUrl: string): DemoSessionState {
         }
         const body = (await resp.json()) as {
           tenant_id: string;
+          token: string;
           expires_in: number;
         };
-        if (!cancelled) {
-          setState({
-            loading: false,
+        if (cancelled) return;
+        setState({
+          loading: false,
+          tenantId: body.tenant_id,
+          token: body.token,
+          expiresIn: body.expires_in,
+          error: null,
+        });
+        if (onReadyRef.current) {
+          onReadyRef.current({
             tenantId: body.tenant_id,
+            token: body.token,
             expiresIn: body.expires_in,
-            error: null,
           });
         }
       } catch (e) {
         if (cancelled) return;
         const msg = e instanceof Error ? e.message : "demo session error";
-        setState({ loading: false, tenantId: null, expiresIn: null, error: msg });
+        setState({
+          loading: false,
+          tenantId: null,
+          token: null,
+          expiresIn: null,
+          error: msg,
+        });
       }
     }
 
