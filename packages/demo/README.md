@@ -10,6 +10,12 @@ backend. This frontend package provides:
   first mount (POSTs `/api/v1/demo/session` and stores the JWT cookie)
 - `isDemoMode()` — checks the build-time `VITE_BSVIBE_DEMO=1` /
   `NEXT_PUBLIC_BSVIBE_DEMO=1` flag
+- `runDemoSmokeSuite({ product, baseUrl, apiUrl })` (subpath
+  `@bsvibe/demo/testing`) — Playwright smoke tests every demo
+  deployment must pass. Catches the four bug classes that surfaced
+  in the initial rollout: `isDemoMode()` runtime mismatch,
+  middleware /login redirect, seed schema 500, broken tenant
+  isolation. Used as a CI gate before merging demo changes.
 
 ## Install (per product)
 
