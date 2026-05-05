@@ -1,6 +1,6 @@
 {
   "name": "@bsvibe/demo",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "BSVibe demo SDK — DemoBanner + useAutoDemoSession hook for the public interactive demo stack",
   "license": "MIT",
   "type": "module",
