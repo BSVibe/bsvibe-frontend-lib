@@ -117,9 +117,14 @@ const CSS = `
     font-size: 12px;
   }
   /* Hide the message text on narrow phones — badge + CTA + × already
-     communicate "demo, sign up, or close" without the long sentence. */
+     communicate "demo, sign up, or close" without the long sentence.
+     The CTA gets margin-left:auto so CTA + × snap to the right edge
+     instead of clustering next to the badge in the middle of the bar. */
   .bsvibe-demo-banner__msg {
     display: none;
+  }
+  .bsvibe-demo-banner__cta {
+    margin-left: auto;
   }
 }
 /* Push @bsvibe/layout's hamburger trigger below the banner while it's
