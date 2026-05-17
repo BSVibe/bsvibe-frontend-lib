@@ -1,13 +1,16 @@
 {
   "name": "@bsvibe/i18n",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "BSVibe i18n — next-intl wrapper with shared common/auth namespaces (ko/en)",
   "license": "MIT",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist", "src/messages"],
+  "files": [
+    "dist",
+    "src/messages"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -56,9 +59,15 @@
     "react": ">=19.0.0"
   },
   "peerDependenciesMeta": {
-    "next": { "optional": true },
-    "next-intl": { "optional": false },
-    "react": { "optional": false }
+    "next": {
+      "optional": true
+    },
+    "next-intl": {
+      "optional": false
+    },
+    "react": {
+      "optional": false
+    }
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",
