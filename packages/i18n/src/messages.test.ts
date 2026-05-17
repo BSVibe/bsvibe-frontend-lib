@@ -30,12 +30,20 @@ describe('message JSON parity (ko ↔ en drift guard)', () => {
     expect(flatten(authKo)).toEqual(flatten(authEn));
   });
 
-  it('common namespace has at least 30 strings (baseline)', () => {
-    expect(flatten(commonKo).length).toBeGreaterThanOrEqual(30);
+  it('common namespace has at least 40 strings (baseline)', () => {
+    expect(flatten(commonKo).length).toBeGreaterThanOrEqual(40);
   });
 
   it('auth namespace has at least 20 strings (baseline)', () => {
     expect(flatten(authKo).length).toBeGreaterThanOrEqual(20);
+  });
+
+  it('common ships the cross-product table/pagination/nav namespaces', () => {
+    const keys = flatten(commonEn);
+    expect(keys).toContain('table.empty');
+    expect(keys).toContain('pagination.next');
+    expect(keys).toContain('pagination.showing');
+    expect(keys).toContain('nav.language');
   });
 
   it('every leaf value is a non-empty string in both locales', () => {
