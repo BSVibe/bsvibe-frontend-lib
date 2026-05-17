@@ -40,6 +40,7 @@ export { getRequestConfig, mergeMessages } from './request';
 export type { RequestConfig, RequestConfigArgs } from './request';
 
 export { createI18nMiddleware, defaultMatcher } from './middleware';
+export type { CreateI18nMiddlewareOptions } from './middleware';
 
 export { BSVibeIntlProvider } from './provider';
 export type { BSVibeIntlProviderProps } from './provider';
