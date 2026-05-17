@@ -37,5 +37,24 @@
     "required": "필수 항목입니다",
     "optional": "선택",
     "placeholderText": "입력하세요"
+  },
+  "table": {
+    "empty": "데이터가 없습니다",
+    "loading": "데이터를 불러오는 중…"
+  },
+  "pagination": {
+    "previous": "이전",
+    "next": "다음",
+    "first": "처음",
+    "last": "마지막",
+    "page": "페이지",
+    "of": "/",
+    "rowsPerPage": "페이지당 행 수",
+    "showing": "{total}개 중 {from}–{to} 표시"
+  },
+  "nav": {
+    "openMenu": "메뉴 열기",
+    "closeMenu": "메뉴 닫기",
+    "language": "언어"
   }
 }

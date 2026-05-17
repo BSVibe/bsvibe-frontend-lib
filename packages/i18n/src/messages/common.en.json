@@ -37,5 +37,24 @@
     "required": "Required",
     "optional": "Optional",
     "placeholderText": "Enter a value"
+  },
+  "table": {
+    "empty": "No data",
+    "loading": "Loading data…"
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next",
+    "first": "First",
+    "last": "Last",
+    "page": "Page",
+    "of": "of",
+    "rowsPerPage": "Rows per page",
+    "showing": "Showing {from}–{to} of {total}"
+  },
+  "nav": {
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "language": "Language"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@bsvibe/i18n",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "BSVibe i18n — next-intl wrapper with shared common/auth namespaces (ko/en)",
   "license": "MIT",
   "type": "module",
