@@ -133,19 +133,23 @@ export function ResponsiveSidebar({
   return (
     <>
       {/* Hamburger trigger — hidden on md+ (desktop has inline rail).
-          Pinned `fixed top-3 left-3 z-50` so consumers don't need their own CSS;
-          z-50 beats the drawer (z-40) + backdrop (z-30) so the tap target is
-          always reachable on top of either layer. */}
-      <button
-        type="button"
-        aria-label="Open navigation"
-        aria-expanded={open}
-        aria-controls="bsvibe-sidebar-drawer"
-        className={`bsvibe-sidebar__hamburger ${TAP_TARGET} md:hidden fixed top-3 left-3 z-50 inline-flex items-center justify-center rounded-md text-gray-100 hover:bg-gray-800 active:bg-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500`}
-        onClick={() => setOpen(true)}
-      >
-        <span aria-hidden="true">☰</span>
-      </button>
+          Pinned `fixed top-3 left-3 z-50` so consumers don't need their own
+          CSS. Only rendered while the drawer is CLOSED: an open drawer is
+          `w-64` from `left-0`, so a `left-3` hamburger would sit on top of
+          the drawer's own logo. While open, the drawer's `✕` close button
+          (and the backdrop) are the controls. */}
+      {open ? null : (
+        <button
+          type="button"
+          aria-label="Open navigation"
+          aria-expanded={false}
+          aria-controls="bsvibe-sidebar-drawer"
+          className={`bsvibe-sidebar__hamburger ${TAP_TARGET} md:hidden fixed top-3 left-3 z-50 inline-flex items-center justify-center rounded-md text-gray-100 hover:bg-gray-800 active:bg-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500`}
+          onClick={() => setOpen(true)}
+        >
+          <span aria-hidden="true">☰</span>
+        </button>
+      )}
 
       {/* Backdrop — only present when open (mobile only). Clicking closes. */}
       {open ? (

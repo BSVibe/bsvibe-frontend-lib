@@ -170,6 +170,26 @@ describe('ResponsiveSidebar', () => {
     expect(screen.queryByTestId('bsvibe-sidebar-backdrop')).toBeNull();
   });
 
+  it('removes the fixed hamburger while the drawer is open (no logo overlap)', () => {
+    // The `fixed left-3 z-50` hamburger would otherwise sit on top of the
+    // open drawer's own logo (the drawer is `w-64` from `left-0`). It must
+    // not be in the DOM while open — the drawer's `✕` close button is the
+    // control in the open state.
+    render(<ResponsiveSidebar items={ITEMS} logo={<span>Brand</span>} />);
+    expect(
+      screen.getByRole('button', { name: /open navigation/i }),
+    ).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /open navigation/i }));
+    expect(
+      screen.queryByRole('button', { name: /open navigation/i }),
+    ).toBeNull();
+    // Re-closing brings it back.
+    fireEvent.click(screen.getByRole('button', { name: /close navigation/i }));
+    expect(
+      screen.getByRole('button', { name: /open navigation/i }),
+    ).toBeInTheDocument();
+  });
+
   it('aside has aria-hidden true while closed (drawer mode) and false while open', () => {
     const { container } = render(<ResponsiveSidebar items={ITEMS} />);
     // Direct DOM query — aria-hidden=true makes the aside invisible to a11y
